@@ -1,0 +1,56 @@
+[
+  {
+    "version": "1.0.0",
+    "display": "1.0.0",
+    "url": "https://userguide.mdanalysis.org/1.0.0",
+    "latest": false
+  },
+  {
+    "version": "1.0.1",
+    "display": "1.0.1",
+    "url": "https://userguide.mdanalysis.org/1.0.1",
+    "latest": false
+  },
+  {
+    "version": "1.1.1",
+    "display": "1.1.1",
+    "url": "https://userguide.mdanalysis.org/1.1.1",
+    "latest": false
+  },
+  {
+    "version": "2.0.0",
+    "display": "2.0.0",
+    "url": "https://userguide.mdanalysis.org/2.0.0",
+    "latest": true
+  },
+  {
+    "version": "2.0.0-dev0",
+    "display": "2.0.0-dev0",
+    "url": "https://userguide.mdanalysis.org/2.0.0-dev0",
+    "latest": false
+  },
+  {
+    "version": "2.1.0-dev0",
+    "display": "2.1.0-dev0",
+    "url": "https://userguide.mdanalysis.org/2.1.0-dev0",
+    "latest": false
+  },
+  {
+    "version": "2.2.0-dev0",
+    "display": "2.2.0-dev0",
+    "url": "https://userguide.mdanalysis.org/2.2.0-dev0",
+    "latest": false
+  },
+  {
+    "version": "dev",
+    "display": "dev",
+    "url": "https://userguide.mdanalysis.org/dev",
+    "latest": false
+  },
+  {
+    "version": "stable",
+    "display": "stable",
+    "url": "https://userguide.mdanalysis.org/stable",
+    "latest": false
+  }
+]
