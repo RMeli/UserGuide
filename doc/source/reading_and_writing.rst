@@ -89,6 +89,7 @@ The most straightforward way to do this is to pass ``in_memory=True`` to :class:
 automatically transfers a trajectory to memory:
 
 .. ipython:: python
+    :okwarning:
 
     from MDAnalysis.tests.datafiles import TPR, XTC
 
@@ -106,6 +107,7 @@ time with the
 of a :class:`~MDAnalysis.core.universe.Universe`:
 
 .. ipython:: python
+    :okwarning:
 
     universe = mda.Universe(TPR, XTC)
     universe.transfer_to_memory()
@@ -118,6 +120,7 @@ Building trajectories in memory
 :class:`~MDAnalysis.coordinates.memory.MemoryReader` can also be used to directly generate a trajectory as a numpy array.
 
 .. ipython:: python
+    :okwarning:
 
     from MDAnalysisTests.datafiles import PDB
     from MDAnalysis.coordinates.memory import MemoryReader
@@ -137,6 +140,7 @@ The :meth:`~MDAnalysis.core.universe.Universe.load_new` method can be used to lo
 or they can be directly passed in when creating a Universe.
 
 .. ipython:: python
+    :okwarning:
 
     universe2 = mda.Universe(PDB, coordinates, format=MemoryReader)
     universe2.atoms.positions
@@ -191,21 +195,47 @@ You can pass keyword arguments to some format writers. For example, the :ref:`LA
 Pickling
 ========
 
-MDAnalysis currently supports pickling of AtomGroups and trajectories that have *not* been read in as :ref:`multiple files <chainreader>` or from a PDB file (`Issue 1981`_). Universe cannot be pickled.
+MDAnalysis supports pickling of most of its data structures and trajectory formats. Unsupported attributes can be found in PR `#2887 <https://github.com/MDAnalysis/mdanalysis/issues/2887>`_.
+
+.. ipython:: python
+    :okwarning:
+
+    import pickle
+    from MDAnalysis.tests.datafiles import PSF, DCD
+    psf = mda.Universe(PSF, DCD)
+    pickle.loads(pickle.dumps(psf))
+
+As for :class:`MDAnalysis.core.groups.AtomGroup`, during serialization, it will be pickled with its bound
+:class:`MDAnalysis.core.universe.Universe`. This means that after unpickling,
+a new :class:`MDAnalysis.core.universe.Universe` will be created and
+be attached to the new :class:`MDAnalysis.core.groups.AtomGroup`. If the Universe is serialized
+with its :class:`MDAnalysis.core.groups.AtomGroup`, they will still be bound together afterwards:
 
 .. ipython:: python
 
     import pickle
     from MDAnalysis.tests.datafiles import PSF, DCD
-    psf = mda.Universe(PSF, DCD)
-    pickle.loads(pickle.dumps(psf.trajectory))
+    u = mda.Universe(PSF, DCD)
+    g = u.atoms
+    g_pickled = pickle.loads(pickle.dumps(g))
+    print("g_pickled.universe is u: ", u is g_pickled.universe)
+    g_pickled, u_pickled = pickle.loads(pickle.dumps((g, u)))
+    print("g_pickled.universe is u_pickled: ",
+           u_pickled is g_pickled.universe)
 
-While *trajectories* from PDB files cannot be pickled, trajectories where only the topology information comes from a PDB file *can*. For example, the universe below loads the trajectory information from a :ref:`TRR <TRR-format>` file.
+If multiple :class:`MDAnalysis.core.groups.AtomGroup`\ s are bound to the same
+:class:`MDAnalysis.core.universe.Universe`, they will also be bound to the same one
+after serialization:
 
 .. ipython:: python
 
-    u = mda.Universe(PDB, TRR)
-    pickle.loads(pickle.dumps(u.trajectory))
-
-
-.. _`Issue 1981`: https://github.com/MDAnalysis/mdanalysis/issues/1981>
+    u = mda.Universe(PSF, DCD)
+    g = u.atoms[:2]
+    h = u.atoms[2:4]
+    g_pickled = pickle.loads(pickle.dumps(g))
+    h_pickled = pickle.loads(pickle.dumps(h))
+    print("g_pickled.universe is h_pickled.universe : ",
+           g_pickled.universe is h_pickled.universe)
+    g_pickled, h_pickled = pickle.loads(pickle.dumps((g, h)))
+    print("g_pickled.universe is h_pickled.universe: ",
+           g_pickled.universe is h_pickled.universe)

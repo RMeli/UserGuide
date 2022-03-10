@@ -22,7 +22,8 @@ doc/build
 *.so
 
 # Ignore generated docs
-# *.txt
+# */**/*.txt
+# !requirements.txt
 
 # ignore generated files
 *.vmd
@@ -35,6 +36,7 @@ doc/build
 *.xtc
 *.pkl
 *.dat
+*.dx
 
 # example files
 doc/source/examples/**/*.*

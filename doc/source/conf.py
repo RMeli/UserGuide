@@ -16,8 +16,9 @@
 import datetime
 from collections import OrderedDict
 import MDAnalysis as mda
-# import subprocess
+import subprocess
 import sphinx_rtd_theme
+import msmb_theme
 from ipywidgets.embed import DEFAULT_EMBED_REQUIREJS_URL
 
 # -- Project information -----------------------------------------------------
@@ -40,11 +41,12 @@ def sort_authors(filename):
     original = ['Lily Wang', 'Richard J. Gowers', 'Oliver Beckstein']
     for name in original:
         authors.remove(name)
-    
+
     # sort on last name
     authors.sort(key=lambda name: name.split()[-1])
     authors = original[:1] + authors + original[-2:]
     return authors
+
 
 author_list = sort_authors('AUTHORS')
 author = ', '.join(author_list[:-1]) + ', and ' + author_list[-1]
@@ -54,13 +56,14 @@ copyright = '2019-{}, {}.'.format(now.year, author)
 # -- Scripts -----------------------------------------------
 # Get Travis to regenerate txt tables by re-running scripts
 # before deploying docs.
-# Turned off for now as 0.21.0 not released yet.
 # This allows us to gitignore .txt files as well as
 # auto-recreate tables for each deployment.
 # Turn off if using sphinx_autobuild as this will autobuild
 # to infinity.
+# TURNED OFF FOR NOW until we sort out how versioned docs
+# work and how we will install MDAnalysis + dependencies
 #
-# subprocess.call('./scripts/generate_all.sh')
+subprocess.call('./scripts/generate_all.sh')
 
 # -- General configuration ---------------------------------------------------
 
@@ -90,7 +93,11 @@ todo_include_todos = True
 
 mathjax_path = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
 
-site_url = "https://www.mdanalysis.org/UserGuide"
+site_url = "https://userguide.mdanalysis.org"
+html_baseurl = "https://userguide.mdanalysis.org/"
+sitemap_url_scheme = "{link}"
+html_use_opensearch = 'https://userguide.mdanalysis.org'
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -98,18 +105,21 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store',
-                    '.ipynb_checkpoints', '**/.ipynb_checkpoints', 'scripts', '.*.ipynb']
-
+                    '.ipynb_checkpoints', '**/.ipynb_checkpoints',
+                    'scripts', '**/.*.ipynb', '.*']
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
-# html_theme_path = ['_themes', ]
+html_theme = 'msmb_theme'
+# Add any paths that contain custom themes here, relative to this directory.
+html_theme_path = [
+    msmb_theme.get_html_theme_path(),
+    sphinx_rtd_theme.get_html_theme_path()
+]
 
 # styles/fonts to match http://mdanalysis.org (see public/css)
 #
@@ -152,6 +162,9 @@ html_theme_options = {
 html_favicon = "_static/logos/mdanalysis-logo.ico"
 html_logo = '_static/logos/user_guide.png'
 
+html_context = {
+    'versions_json_url': 'https://userguide.mdanalysis.org/versions.json'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -172,10 +185,13 @@ html_sidebars = {
 
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by MDAnalysis
+mda_version = mda.__version__
 intersphinx_mapping = {'https://docs.python.org/': None,
                        'https://docs.scipy.org/doc/numpy/': None,
-                       'https://www.mdanalysis.org/docs/': None,
+                       f'https://docs.mdanalysis.org/{mda_version}/': None,
                        'https://docs.pytest.org/en/latest/': None,
+                       'https://chemfiles.org/chemfiles.py/latest/': None,
+                       'http://parmed.github.io/ParmEd/html/': None,
                        }
 
 # nbsphinx
@@ -191,11 +207,10 @@ nbsphinx_prolog = r"""
     <script src='http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js'></script>
     <script>require=requirejs;</script>
 
-
 """
 
 # substitutions
-MDAnalysis_version = '0.20.1'
+MDAnalysis_version = version = mda.__version__
 
 # rst-epilog implements substitutions
 rst_epilog = """

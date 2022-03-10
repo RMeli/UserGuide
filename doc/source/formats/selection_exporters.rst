@@ -8,9 +8,7 @@ Selection exporters
 
 Selection exporters allow you to write a selection of atoms to a file that can be read by another program. 
 
-.. table:: Supported selection exporters
-
-    .. include:: selection_exporter_formats.txt
+.. include:: selection_exporter_formats.txt
 
 Writing selections
 ==================
@@ -24,6 +22,7 @@ same selection of atoms in a different package, for example, to
 visualize the atoms in VMD_. 
 
 .. ipython:: python
+    :okwarning:
 
     import MDAnalysis as mda
     from MDAnalysis.tests.datafiles import PDB

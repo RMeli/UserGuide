@@ -73,6 +73,7 @@ Wherever possible, do not take these conversations to private channels, includin
    examples/quickstart
    faq
    examples/README
+   API docs <https://docs.mdanalysis.org/stable/index.html>
 
 .. toctree::
    :maxdepth: 1
@@ -84,7 +85,15 @@ Wherever possible, do not take these conversations to private channels, includin
    groups_of_atoms
    selections
    topology_system
-   trajectories
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Trajectories
+   :hidden:
+
+   trajectories/trajectories
+   trajectories/slicing_trajectories
+   trajectories/transformations
    units
 
 .. toctree::
@@ -106,6 +115,7 @@ Wherever possible, do not take these conversations to private channels, includin
 
    examples/analysis/README
    examples/analysis/custom_trajectory_analysis
+   examples/analysis/custom_parallel_analysis
 
 .. toctree::
    :maxdepth: 1
@@ -127,4 +137,5 @@ Wherever possible, do not take these conversations to private channels, includin
    preparing_releases_and_hotfixes
    module_imports
    testing
+   Development docs <https://docs.mdanalysis.org/dev/index.html>
    references

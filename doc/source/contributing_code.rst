@@ -4,7 +4,7 @@
 Contributing to the main codebase
 =================================
 
-If you would like to contribute, start by searching through the `issues <https://github.com/MDAnalysis/mdanalysis/issues>`_ and :ref:`pull requests <https://github.com/MDAnalysis/mdanalysis/pulls>` to see whether someone else has raised a similar idea or question.
+If you would like to contribute, start by searching through the `issues <https://github.com/MDAnalysis/mdanalysis/issues>`_ and `pull requests <https://github.com/MDAnalysis/mdanalysis/pulls>`_ to see whether someone else has raised a similar idea or question.
 
 If you don't see your idea or problem listed, do one of the following:
 
@@ -18,7 +18,7 @@ Here is an overview of the development workflow for code or inline code document
     #. :ref:`Set up an isolated virtual environment <create-virtual-environment>` for code development
     #. :ref:`Build development versions <build-mdanalysis-develop>` of MDAnalysis and MDAnalysisTests on your computer into the virtual environment
     #. :ref:`Create a new branch off the develop branch <create-code-branch>`
-    #. :ref:`Add your new feature or bug fix <writing new code>` or :ref:`add your new documentation <guidelines-for-docstrings>`
+    #. :ref:`Add your new feature or bug fix <writing-new-code>` or :ref:`add your new documentation <guidelines-for-docstrings>`
     #. :ref:`Add and run tests <testing>` (if adding to the code)
     #. :ref:`Build and view the documentation <building-code-documentation>` (if adding to the docs)
     #. :ref:`Commit and push your changes, and open a pull request. <adding-code-to-mda>`
@@ -203,27 +203,37 @@ Building MDAnalysis
 -------------------
 
 Make sure that you have :ref:`cloned the repository <forking-code-repo>`  
-and activated your virtual environment. First we need to install dependencies:
+and activated your virtual environment. First we need to install dependencies. If you're using conda, you'll need a mix of conda and pip installations:
 
     .. code-block:: bash
 
-        # if using conda
         conda install -c biobuilds -c conda-forge \
-         cython numpy mmtf-python mock six biopython \
-         networkx cython matplotlib scipy griddataformats \
-         hypothesis gsd codecov "seaborn>=0.7.0,<=0.9" \
-         clustalw=2.1 netcdf4 scikit-learn "joblib>=0.12"\
-         psutil pytest
+            biopython chemfiles clustalw==2.1 codecov cython \
+            griddataformats gsd hypothesis "joblib>=0.12" \
+            matplotlib mmtf-python mock netcdf4 networkx \
+            "numpy>=1.17.3" psutil pytest scikit-learn scipy \
+            "seaborn>=0.7.0,<0.9" sphinx==1.8.5 "tidynamics>=1.0.0" \
+            "tqdm>=4.43.0"
+
         # if using conda with python 3.7 or 3.8, also run
         conda install -c conda-forge parmed
+
         # if using conda with other versions of python, also run
         pip install parmed
 
-        # if using pip
-        pip install cython numpy mmtf-python mock six biopython \
-         networkx cython matplotlib scipy griddataformats \
-         hypothesis gsd codecov "seaborn>=0.7.0,<=0.9" \
-         netcdf4 scikit-learn "joblib>=0.12" parmed psutil pytest
+        # documentation dependencies
+        pip install sphinx-sitemap sphinx_rtd_theme msmb_theme==1.2.0
+
+If you're using pip, it is a little simpler. However, some packages such as ``clustalw`` are not available via pip.
+
+    .. code-block:: bash
+
+        pip install biopython chemfiles codecov cython \
+          griddataformats gsd hypothesis "joblib>=0.12" matplotlib \
+          msmb_theme==1.2.0 netcdf4 networkx "numpy>=1.17.3" \
+          parmed psutil pytest scikit-learn scipy "seaborn>=0.7.0,<0.9" \
+          sphinx==1.8.5 sphinx_rtd_theme "tidynamics>=1.0.0" \
+          "tqdm>=4.43.0"
 
 Ensure that you have a working C/C++ compiler (e.g. gcc or clang). You will also need Python ≥ 3.4. We will now install MDAnalysis. 
 
@@ -428,7 +438,7 @@ This opens up a message editor.
 
     - use a short (<50 characters) subject line that summarizes the change
     - leave a blank line
-    - optionally, add additional more verbose descriptions; paragraphs or bullet lists (with - or *) are good
+    - optionally, add additional more verbose descriptions; paragraphs or bullet lists (with ``-`` or ``*``) are good
     - manually break lines at 80 characters
     - manually indent bullet lists
 
@@ -551,17 +561,7 @@ Building the documentation
 
 The online documentation is generated from the pages in ``mdanalysis/package/doc/sphinx/source/documentation_pages``. The documentation for the current release are hosted at www.mdanalysis.org/docs, while the development version is at www.mdanalysis.org/mdanalysis/. 
 
-In order to build the documentation, you must first :ref:`clone the main MDAnalysis repo <forking-code-repo>`. :ref:`Set up a virtual environment <create-virtual-environment>` in the same way as you would for the code (you can use the same environment as you do for the code). You will need to install several packages for the docs.
-
-    .. code-block:: bash
-
-        pip install sphinx sphinx-sitemap sphinx_rtd_theme
-
-In addition, build the development version of MDAnalysis (if you haven't done this already):
-
-    .. code-block:: bash
-
-        pip install -e .
+In order to build the documentation, you must first :ref:`clone the main MDAnalysis repo <forking-code-repo>`. :ref:`Set up a virtual environment <create-virtual-environment>` in the same way as you would for the code (you should typically use the same environment as you do for the code). Build the development version of MDAnalysis. 
 
 Then, generate the docs with:
 
@@ -694,6 +694,46 @@ A typical function docstring looks like the following:
     .. seealso::
     
         See `Stackoverflow: Mathjax expression in sphinx python not rendering correctly <http://stackoverflow.com/questions/16468397/mathjax-expression-in-sphinx-python-not-rendering-correclty">`_ for further discussion.
+
+
+-------------------
+Documenting changes
+-------------------
+
+.. _versionadded: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded
+.. _versionchanged: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionchanged
+.. _deprecated: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-deprecated
+
+We use reST constructs to annotate *additions*, *changes*, and *deprecations* to the code so that users can quickly learn from the documentation in which version of MDAnalysis the feature is available.
+
+A **newly added module/class/method/attribute/function** gets a `versionadded`_  directive entry in its primary doc section, as below.
+
+.. code-block:: rst
+
+   .. versionadded:: X.Y.Z
+
+For parameters and attributes, we typically mention the new entity in a `versionchanged`_ section of the function or class (although a `versionadded`_ would also be acceptable).
+
+**Changes** are indicated with a `versionchanged`_ directive
+
+.. code-block:: rst
+
+   .. versionchanged:: X.Y.Z
+      Description of the change. Can contain multiple descriptions.
+      Don't assume that you get nice line breaks or formatting, write your text in
+      full sentences that can be read as a paragraph.
+
+**Deprecations** (features that are not any longer recommended for use and that will be removed in future releases) are indicated by the `deprecated`_ directive:
+
+.. code-block:: rst
+
+   .. deprecated:: X.Y.Z
+      Describe (1) alternatives (what should users rather use) and 
+      (2) in which future release the feature will be removed.
+
+When a feature is removed, we remove the deprecation notice and add a `versionchanged`_ to the docs of the enclosing scope. For example, when a parameter of a function is removed, we update the docs of the function. Function/class removal are indicated in the module docs. When we remove a whole module, we typically indicate it in the top-level reST docs that contain the TOC tree that originally included the module.
+
+
 
 --------------------------------------
 Writing docs for abstract base classes

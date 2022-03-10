@@ -8,6 +8,7 @@ Atom selection language
 AtomGroups can be created by selecting atoms using the MDAnalysis atom selection language:
 
 .. ipython:: python
+    :okwarning:
 
     import MDAnalysis as mda
     from MDAnalysis.tests.datafiles import PSF, DCD
@@ -68,14 +69,20 @@ selection parser. The following applies to all selections:
     u.select_atoms("segid DMPC and not (name H* or type OW)")
 
 
-* Currently, wildcards are implemented as a form of pattern
-  matching: Using the ``*`` character in a string such as ``GL*`` selects
-  all strings that start with "GL" such as "GLU", "GLY", "GLX29", "GLN". Only terminal wildcards (i.e. matching the last part of a name) are currently supported. 
+* String selections such as names and residue names can be 
+  matched with Unix shell-style wildcards. These rules include:
 
-.. note::
-
-    Up until version 1.0.0, MDAnalysis will ignore everything after the ``*``. ``u.select_atoms("resname *E")`` will not select atoms whose residue name ends in E, but instead select every atom.
-
+    * Using ``*``  in a string matches any number of any characters
+    * ``?`` matches any single character
+    * ``[seq]`` matches any character in *seq*;
+    * ``[!seq]`` matches any character not in *seq*
+    * ``[!?]`` selects empty strings
+  
+  For example, 
+  the string ``GL*`` selects all strings that start with "GL", 
+  such as "GLU", "GLY", "GLX29", "GLN". ``GL[YN]`` will select all "GLY" and 
+  "GLN" strings. Any number of patterns can be included in the search.
+  For more information on pattern matching, see the :mod:`fnmatch` documentation.
 
 Simple selections
 -----------------
@@ -139,6 +146,11 @@ altloc *alternative-location*
     often the case with high-resolution crystal structures
     e.g. :code:`resid 4 and resname ALA and altloc B` selects only the atoms of ALA-4
     that have an altloc B record.
+
+icode *icode*
+    a selector for atoms where insertion codes are available. This can be combined
+    with residue numbers using the ``resid`` selector above.
+    e.g. :code:`icode [!?]` selects atoms *without* insertion codes.
 
 moltype *molecule-type*
     select by the ``moltype`` :ref:`topology attribute <topology-attributes>`, e.g. ``moltype Protein_A``. At the moment, only the TPR format defines the ``moltype``.
@@ -372,6 +384,7 @@ The most straightforward way to concatenate two AtomGroups is by using the
 ``+`` operator:
 
 .. ipython:: python
+    :okwarning:
 
     ordered = u.select_atoms("resid 3 and name CA") + u.select_atoms("resid 2 and name CA")
     list(ordered)
@@ -381,6 +394,7 @@ A shortcut is to provide *two or more* selections to
 does the concatenation automatically:
 
 .. ipython:: python
+    :okwarning:
 
     list(u.select_atoms("resid 3 and name CA", "resid 2 and name CA"))
 
@@ -389,6 +403,7 @@ Just for comparison to show that a single selection string does not
 work as one might expect:
 
 .. ipython:: python
+    :okwarning:
 
     list(u.select_atoms("(resid 3 or resid 2) and name CA"))
 
