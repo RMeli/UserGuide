@@ -8,9 +8,9 @@
     "\n",
     "We use `align.AlignTraj` to align a trajectory to a frame in a reference trajectory and write it to a file.\n",
     "\n",
-    "**Last updated:** June 25, 2020 with MDAnalysis 1.0.0\n",
+    "**Last updated:** March 1st, 2022 with MDAnalysis 2.0.0\n",
     "\n",
-    "**Minimum version of MDAnalysis:** 1.0.0\n",
+    "**Minimum version of MDAnalysis:** 2.0.0\n",
     "\n",
     "**Packages required:**\n",
     "    \n",
@@ -317,7 +317,7 @@
     "aligned_coords = AnalysisFromFunction(copy_coords, \n",
     "                                      aligned.atoms).run().results\n",
     "\n",
-    "print(aligned_coords.shape)"
+    "print(aligned_coords['timeseries'].shape)"
    ]
   },
   {
@@ -545,9 +545,9 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python (mda-user-guide)",
+   "display_name": "Python 3",
    "language": "python",
-   "name": "mda-user-guide"
+   "name": "python3"
   },
   "language_info": {
    "codemirror_mode": {
@@ -559,7 +559,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.8.3"
+   "version": "3.8.2"
   },
   "toc": {
    "base_numbering": 1,

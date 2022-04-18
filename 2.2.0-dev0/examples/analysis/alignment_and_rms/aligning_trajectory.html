@@ -514,8 +514,8 @@ div.rendered_html tbody tr:hover {
 <script>require=requirejs;</script><div class="section" id="Aligning-a-trajectory-to-a-reference">
 <h1>Aligning a trajectory to a reference<a class="headerlink" href="#Aligning-a-trajectory-to-a-reference" title="Permalink to this headline">¶</a></h1>
 <p>We use <code class="docutils literal notranslate"><span class="pre">align.AlignTraj</span></code> to align a trajectory to a frame in a reference trajectory and write it to a file.</p>
-<p><strong>Last updated:</strong> June 25, 2020 with MDAnalysis 1.0.0</p>
-<p><strong>Minimum version of MDAnalysis:</strong> 1.0.0</p>
+<p><strong>Last updated:</strong> March 1st, 2022 with MDAnalysis 2.0.0</p>
+<p><strong>Minimum version of MDAnalysis:</strong> 2.0.0</p>
 <p><strong>Packages required:</strong></p>
 <ul class="simple">
 <li><p>MDAnalysis (<a class="bibtex reference internal" href="../../../references.html#michaud-agrawal-mdanalysis-2011" id="id1">[MADWB11]</a>, <a class="bibtex reference internal" href="../../../references.html#gowers-mdanalysis-2016" id="id2">[GLB+16]</a>)</p></li>
@@ -685,7 +685,7 @@ is because when <code class="docutils literal notranslate"><span class="pre">Uni
 <span class="n">aligned_coords</span> <span class="o">=</span> <span class="n">AnalysisFromFunction</span><span class="p">(</span><span class="n">copy_coords</span><span class="p">,</span>
                                       <span class="n">aligned</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">results</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">aligned_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aligned_coords</span><span class="p">[</span><span class="s1">&#39;timeseries&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -837,7 +837,7 @@ pip install imageio==1.6
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2019-2022, Lily Wang, Irfan Alibay, Hugo MacDermott-Opeskin, Rocco Meli, Paul Smith, Mieczyslaw Torchala, Yuxuan Zhuang, Richard J. Gowers, and Oliver Beckstein..
+        &#169; Copyright 2019-2022, Lily Wang, Irfan Alibay, Florent Langenfeld, Hugo MacDermott-Opeskin, Rocco Meli, Paul Smith, Mieczyslaw Torchala, Yuxuan Zhuang, Richard J. Gowers, and Oliver Beckstein..
 
     </p>
   </div>
